@@ -1,0 +1,37 @@
+name: 뉴스 자동 수집
+
+on:
+  schedule:
+    # 한국 시간 기준 매일 오전 9시, 오후 6시 실행
+    # UTC 시간으로 변환: 오전 9시 KST = 00:00 UTC, 오후 6시 KST = 09:00 UTC
+    - cron: '0 0,9 * * *'
+  workflow_dispatch: # 수동 실행도 가능하도록 설정
+
+jobs:
+  collect-news:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+      
+      - name: pnpm 설정
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: 의존성 설치
+        run: pnpm install
+      
+      - name: 뉴스 수집 실행
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: pnpm run news
