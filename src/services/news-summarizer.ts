@@ -3,44 +3,43 @@ import { config } from '../config/env.js';
 
 let genAI: GoogleGenerativeAI | null = null;
 
-// Gemini API 초기화
+// Gemini API 초기??
 if (config.ai.geminiApiKey) {
   genAI = new GoogleGenerativeAI(config.ai.geminiApiKey);
 }
 
 /**
- * 뉴스를 한글로 번역하고 한 줄로 요약
+ * ?�스�??��?�?번역?�고 ??줄로 ?�약
  */
 export async function summarizeNewsInKorean(
   title: string,
   description?: string
 ): Promise<string | null> {
-  // API 키가 없으면 요약하지 않음
+  // API ?��? ?�으�??�약?��? ?�음
   if (!genAI || !config.ai.geminiApiKey) {
-    console.log('⚠️ Gemini API 키가 설정되지 않아 요약을 건너뜁니다.');
+    console.log('?�️ Gemini API ?��? ?�정?��? ?�아 ?�약??건너?�니??');
     return null;
   }
 
   try {
-    // 사용 가능한 모델: gemini-1.5-flash (빠르고 효율적), gemini-1.5-pro (고품질)
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    // ?�용 가?�한 모델: gemini-2.5-flash (빠르�??�율??, gemini-1.5-pro (고품�?
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-    // 요약 프롬프트
-    const prompt = `다음 뉴스 기사를 한글로 번역하고 한 줄로 요약해주세요. 요약은 50자 이내로 간결하게 작성해주세요.
+    // ?�약 ?�롬?�트
+    const prompt = `?�음 ?�스 기사�??��?�?번역?�고 ??줄로 ?�약?�주?�요. ?�약?� 50???�내�?간결?�게 ?�성?�주?�요.
 
-제목: ${title}
-${description ? `내용: ${description.substring(0, 500)}` : ''}
+?�목: ${title}
+${description ? `?�용: ${description.substring(0, 500)}` : ''}
 
-한 줄 요약 (한글, 50자 이내):`;
+??�??�약 (?��?, 50???�내):`;
 
     const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const response = result.response;
     const summary = response.text().trim();
 
     return summary;
   } catch (error) {
-    console.error('뉴스 요약 실패:', error);
+    console.error('?�스 ?�약 ?�패:', error);
     return null;
   }
 }
-
