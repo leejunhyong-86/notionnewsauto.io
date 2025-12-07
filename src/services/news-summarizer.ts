@@ -22,9 +22,8 @@ export async function summarizeNewsInKorean(
   }
 
   try {
-    // 사용 가능한 모델: gemini-pro (기본, 가장 안정적)
-    // gemini-1.5-flash는 v1beta에서 지원되지 않을 수 있으므로 gemini-pro 사용
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    // 사용 가능한 모델: gemini-1.5-flash (빠르고 효율적), gemini-1.5-pro (고품질)
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     // 요약 프롬프트
     const prompt = `다음 뉴스 기사를 한글로 번역하고 한 줄로 요약해주세요. 요약은 50자 이내로 간결하게 작성해주세요.
