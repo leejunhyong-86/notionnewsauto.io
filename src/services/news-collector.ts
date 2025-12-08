@@ -107,7 +107,7 @@ export async function saveNewsToNotion(newsItem: NewsItem) {
 
     // 한글 요약 추가 (있는 경우)
     if (newsItem.summary) {
-      properties['한글 요약'] = {
+      properties['한 줄 요약'] = {
         rich_text: [
           {
             text: {
